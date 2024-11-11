@@ -22,6 +22,7 @@ extern uint8_t prev_screen_selection, current_screen_selection;
 extern const screen *current_screen;
 
 void back2Home(void);
+void goToShowTemp(void);
 void goToAbout(void);
 
 const screenItem back_2_home_item = {
@@ -29,18 +30,29 @@ const screenItem back_2_home_item = {
   action: back2Home,
 };
 
+const screenItem back_2_home_items[] = {
+  back_2_home_item,
+};
+
+// -----------------------------------------------------------------------------
+// Show temperature screen
+
+extern void drawOverShowTemp(void);
+
+const screen show_temp_screen = {
+  length: 1,
+  items: back_2_home_items,
+  drawOver: drawOverShowTemp,
+};
+
 // -----------------------------------------------------------------------------
 // About screen
 
 extern void drawOverAbout(void);
 
-const screenItem about_items[] = {
-  back_2_home_item,
-};
-
 const screen about_screen = {
   length: 1,
-  items: about_items,
+  items: back_2_home_items,
   drawOver: drawOverAbout,
 };
 
@@ -57,7 +69,7 @@ const screenItem home_items[] = {
   },
   {
     text: "Show temperature",
-    action: NULL,
+    action: goToShowTemp,
   },
   {
     text: "Invert colors",

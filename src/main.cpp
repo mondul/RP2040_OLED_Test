@@ -67,6 +67,11 @@ void invertColors() {
   prev_screen_selection = 0; // Force screen redraw
 }
 
+void drawOverShowTemp() {
+  setLine(3);
+  display.printf("IC temp: %2.1f\xB0""C", analogReadTemp());
+}
+
 void drawOverAbout() {
   setLine(3);
   display.print("RP2040 OLED Test\ngithub.com/mondul");
@@ -82,6 +87,7 @@ void turnScreenOff() {
 void setup() {
   // put your setup code here, to run once:
   pinMode(PIN_BTN, INPUT_PULLUP);
+  pinMode(PIN_LED, OUTPUT);
   // Start PIO encoder
   encoder.begin();
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Address 0x3D for 128x64
