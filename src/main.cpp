@@ -45,7 +45,7 @@ void invertLine(uint8_t line) {
   }
 }
 
-uint8_t is_inverted = 0;
+bool is_inverted = false;
 
 void showScreen() {
   display.clearDisplay();
@@ -63,7 +63,7 @@ void showScreen() {
 // Functions in _screens_ that use _display_
 
 void invertColors() {
-  is_inverted = ~is_inverted;
+  is_inverted = !is_inverted;
   prev_screen_selection = 0; // Force screen redraw
 }
 
