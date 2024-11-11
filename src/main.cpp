@@ -45,9 +45,6 @@ void invertLine(uint8_t line) {
   }
 }
 
-uint8_t prev_screen_selection = 1, current_screen_selection = 1;
-const screen *current_screen = &home_screen;
-
 uint8_t is_inverted = 0;
 
 void showScreen() {
@@ -58,12 +55,21 @@ void showScreen() {
     display.print(current_screen->items[i].text);
   }
   invertLine(current_screen_selection);
+  if (current_screen->drawOver)
+    current_screen->drawOver();
   display.display();
 }
 
+// Functions in _screens_ that use _display_
+
 void invertColors() {
   is_inverted = ~is_inverted;
-  showScreen();
+  prev_screen_selection = 0; // Force screen redraw
+}
+
+void drawOverAbout() {
+  setLine(3);
+  display.print("RP2040 OLED Test\ngithub.com/mondul");
 }
 
 void turnScreenOff() {
@@ -72,6 +78,7 @@ void turnScreenOff() {
   display.display();
 }
 
+// Program entry point
 void setup() {
   // put your setup code here, to run once:
   pinMode(PIN_BTN, INPUT_PULLUP);
@@ -81,7 +88,8 @@ void setup() {
   buf = display.getBuffer();
   display.setTextColor(WHITE);
   display.setFont(&Charcoal6pt8b);
-  showScreen();
+  // Load home screen
+  back2Home();
 }
 
 int prev_count = 0, current_count = 0;
@@ -101,12 +109,14 @@ void loop() {
   if (current_count > prev_count + 6) {
     prev_count = current_count;
     current_screen_selection++;
-    if (current_screen_selection > 5) current_screen_selection = 1;
+    if (current_screen_selection > current_screen->length)
+      current_screen_selection = 1;
   }
   else if (current_count < prev_count - 6) {
     prev_count = current_count;
     current_screen_selection--;
-    if (current_screen_selection < 1) current_screen_selection = 5;
+    if (current_screen_selection < 1)
+      current_screen_selection = current_screen->length;
   }
 
   if (prev_screen_selection != current_screen_selection) {
