@@ -5,7 +5,8 @@
 #include <Arduino.h>
 #include "screens.h"
 
-uint8_t prev_screen_selection, current_screen_selection, home_screen_selection = 1;
+volatile uint8_t prev_screen_selection;
+uint8_t current_screen_selection, home_screen_selection = 1;
 const screen *current_screen;
 
 struct repeating_timer timer;
@@ -18,7 +19,7 @@ void back2Home() {
   current_screen = &home_screen;
 }
 
-bool forceRedraw(__unused struct repeating_timer *t) {
+static bool forceRedraw(__unused struct repeating_timer *t) {
   prev_screen_selection = 0;
   return true;
 }
@@ -40,8 +41,8 @@ void goToShowTemp() {
 }
 
 // Blink when on About... screen
-bool is_on = false;
-bool blink(__unused struct repeating_timer *t) {
+volatile bool is_on = false;
+static bool blink(__unused struct repeating_timer *t) {
   digitalWrite(PIN_LED, is_on);
   is_on = !is_on;
   return true;

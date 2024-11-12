@@ -18,7 +18,8 @@ typedef struct
 } screen;
 
 // Variables
-extern uint8_t prev_screen_selection, current_screen_selection;
+extern volatile uint8_t prev_screen_selection;
+extern uint8_t current_screen_selection;
 extern const screen *current_screen;
 
 void back2Home(void);
