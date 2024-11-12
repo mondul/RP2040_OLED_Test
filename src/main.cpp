@@ -97,7 +97,7 @@ void drawOverAbout() {
 
 void turnScreenOff() {
   display.clearDisplay();
-  display.invertDisplay(0);
+  display.invertDisplay(false);
   display.display();
 }
 
