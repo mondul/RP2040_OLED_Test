@@ -12,6 +12,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <hardware/rtc.h>
 // Custom font
 #include "Charcoal6pt8b.h"
 // XOR table
@@ -67,6 +68,23 @@ void invertColors() {
   prev_screen_selection = 0; // Force screen redraw
 }
 
+// Start on Friday 5th of June 2020 15:45:00
+datetime_t t = {
+  .year  = 2020,
+  .month = 06,
+  .day   = 05,
+  .dotw  = 5, // 0 is Sunday, so 5 is Friday
+  .hour  = 15,
+  .min   = 45,
+  .sec   = 00
+};
+
+void drawOverShowDateTime() {
+  rtc_get_datetime(&t);
+  setLine(4);
+  display.printf("%d-%02d-%02d %02d:%02d:%02d", t.year, t.month, t.day, t.hour, t.min, t.sec);
+}
+
 void drawOverShowTemp() {
   setLine(3);
   display.printf("IC temp: %2.1f\xB0""C", analogReadTemp());
@@ -90,6 +108,10 @@ void setup() {
   pinMode(PIN_LED, OUTPUT);
   // Start PIO encoder
   encoder.begin();
+  // Start RTC
+  rtc_init();
+  rtc_set_datetime(&t);
+  // Start display
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Address 0x3D for 128x64
   buf = display.getBuffer();
   display.setTextColor(WHITE);

@@ -22,6 +22,7 @@ extern uint8_t prev_screen_selection, current_screen_selection;
 extern const screen *current_screen;
 
 void back2Home(void);
+void goToShowDateTime(void);
 void goToShowTemp(void);
 void goToAbout(void);
 
@@ -32,6 +33,25 @@ const screenItem back_2_home_item = {
 
 const screenItem back_2_home_items[] = {
   back_2_home_item,
+};
+
+// -----------------------------------------------------------------------------
+// Show date & time screen
+
+extern void drawOverShowDateTime(void);
+
+const screenItem show_datetime_items[] = {
+  back_2_home_item,
+  {
+    text: "Adjust date & time",
+    action: NULL,
+  },
+};
+
+const screen show_datetime_screen = {
+  length: 2,
+  items: show_datetime_items,
+  drawOver: drawOverShowDateTime,
 };
 
 // -----------------------------------------------------------------------------
@@ -65,7 +85,7 @@ extern void turnScreenOff(void);
 const screenItem home_items[] = {
   {
     text: "Show date & time",
-    action: NULL,
+    action: goToShowDateTime,
   },
   {
     text: "Show temperature",

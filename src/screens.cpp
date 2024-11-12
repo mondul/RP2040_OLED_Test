@@ -24,6 +24,14 @@ bool forceRedraw(__unused struct repeating_timer *t) {
   return true;
 }
 
+void goToShowDateTime() {
+  add_repeating_timer_ms(-1000, forceRedraw, NULL, &timer);
+  home_screen_selection = current_screen_selection;
+  prev_screen_selection = 0;
+  current_screen_selection = 1;
+  current_screen = &show_datetime_screen;
+}
+
 void goToShowTemp() {
   add_repeating_timer_ms(-1000, forceRedraw, NULL, &timer);
   home_screen_selection = current_screen_selection;
