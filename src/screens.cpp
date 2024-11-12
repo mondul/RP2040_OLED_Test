@@ -3,7 +3,6 @@
  */
 
 #include <Arduino.h>
-#include "pico/stdlib.h"
 #include "screens.h"
 
 uint8_t prev_screen_selection, current_screen_selection, home_screen_selection = 1;
