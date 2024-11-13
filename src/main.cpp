@@ -52,12 +52,14 @@ void showScreen() {
   display.clearDisplay();
   display.invertDisplay(is_inverted);
   for (uint8_t i = 0; i < current_screen->length; i++) {
-    setLine(1 + i);
-    display.print(current_screen->items[i].text);
+    if (current_screen->items[i].text) {
+      setLine(1 + i);
+      display.print(current_screen->items[i].text);
+    }
   }
-  invertLine(current_screen_selection);
   if (current_screen->drawOver)
     current_screen->drawOver();
+  invertLine(current_screen_selection);
   display.display();
 }
 
@@ -68,21 +70,26 @@ void invertColors() {
   prev_screen_selection = 0; // Force screen redraw
 }
 
-// Start on Friday 5th of June 2020 15:45:00
+// Start on Monday 28th of May 2024 23:59:00
 datetime_t t = {
-  .year  = 2020,
-  .month = 06,
-  .day   = 05,
-  .dotw  = 5, // 0 is Sunday, so 5 is Friday
-  .hour  = 15,
-  .min   = 45,
+  .year  = 2024,
+  .month = 05,
+  .day   = 28,
+  .dotw  = 1, // 0 is Sunday
+  .hour  = 23,
+  .min   = 59,
   .sec   = 00
 };
 
+const char *days[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", };
+const char *months[] = { NULL, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", };
+
 void drawOverShowDateTime() {
   rtc_get_datetime(&t);
-  setLine(4);
-  display.printf("%d-%02d-%02d %02d:%02d:%02d", t.year, t.month, t.day, t.hour, t.min, t.sec);
+  setLine(2);
+  display.printf("%s  %s %d / %d", days[t.dotw], months[t.month], t.day, t.year);
+  setLine(3);
+  display.printf("%02d:%02d:%02d", t.hour, t.min, t.sec);
 }
 
 void drawOverShowTemp() {

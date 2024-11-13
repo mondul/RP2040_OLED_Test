@@ -81,13 +81,17 @@ extern void drawOverShowDateTime(void);
 const screenItem show_datetime_items[] = {
   back_2_home_item,
   {
-    text: "Adjust date & time",
+    text: NULL,
+    action: NULL,
+  },
+  {
+    text: NULL,
     action: NULL,
   },
 };
 
 const screen show_datetime_screen = {
-  length: 2,
+  length: 3,
   items: show_datetime_items,
   drawOver: drawOverShowDateTime,
 };
