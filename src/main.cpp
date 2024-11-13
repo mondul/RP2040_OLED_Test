@@ -27,7 +27,7 @@
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
 #define MAX_BASE 11 // Tallest character height
-#define setLine(LN) display.setCursor(0, (MAX_BASE * (LN)) + (2 * ((LN) - 1))) // One pixel bottom padding
+#define LINE(LN) ((MAX_BASE * (LN)) + (2 * ((LN) - 1))) // One pixel bottom padding
 
 PioEncoder encoder(2); // encoder is connected to GPIO2 and GPIO3
 
@@ -56,7 +56,7 @@ void showScreen() {
   display.invertDisplay(is_inverted);
   for (uint8_t i = 0; i < current_screen->length; i++) {
     if (current_screen->items[i].text) {
-      setLine(1 + i);
+      display.setCursor(0, LINE(1 + i));
       display.print(current_screen->items[i].text);
     }
   }
@@ -90,19 +90,39 @@ const char *months[] = { NULL, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", 
 
 void drawOverShowDateTime() {
   rtc_get_datetime(&t);
-  setLine(2);
+  display.setCursor(0, LINE(2));
   display.printf("%s  %s %d / %d", days[t.dotw], months[t.month], t.day, t.year);
-  setLine(3);
+  display.setCursor(0, LINE(3));
   display.printf("%02d:%02d:%02d", t.hour, t.min, t.sec);
 }
 
+void drawOverSetDate() {
+  display.setCursor(63, LINE(2));
+  display.printf("%d", t.year);
+  display.setCursor(63, LINE(3));
+  display.print(months[t.month]);
+  display.setCursor(63, LINE(4));
+  display.printf("%d", t.day);
+  display.setCursor(63, LINE(5));
+  display.print(days[t.dotw]);
+}
+
+void drawOverSetTime() {
+  display.setCursor(63, LINE(2));
+  display.printf("%02d", t.hour);
+  display.setCursor(63, LINE(3));
+  display.printf("%02d", t.min);
+  display.setCursor(63, LINE(4));
+  display.printf("%02d", t.sec);
+}
+
 void drawOverShowTemp() {
-  setLine(3);
+  display.setCursor(0, LINE(3));
   display.printf("IC temp: %2.1f\xB0""C", analogReadTemp());
 }
 
 void drawOverAbout() {
-  setLine(3);
+  display.setCursor(0, LINE(3));
   display.print("RP2040 OLED Test\ngithub.com/mondul");
 }
 

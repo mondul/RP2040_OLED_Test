@@ -26,6 +26,9 @@ extern const screen *current_screen;
 
 void back2Home(void);
 void goToShowDateTime(void);
+void back2ShowDateTime(void);
+void goToSetDate(void);
+void goToSetTime(void);
 void goToShowTemp(void);
 void goToAbout(void);
 
@@ -36,6 +39,11 @@ const screenItem back_2_home_item = {
 
 const screenItem back_2_home_items[] = {
   back_2_home_item,
+};
+
+const screenItem back_2_show_datetime = {
+  text: "< Back to show d&t",
+  action: back2ShowDateTime,
 };
 
 // -----------------------------------------------------------------------------
@@ -82,11 +90,11 @@ const screenItem show_datetime_items[] = {
   back_2_home_item,
   {
     text: NULL, // Current date will be overwritten here
-    action: NULL,
+    action: goToSetDate,
   },
   {
     text: NULL, // Current time will be overwritten here
-    action: NULL,
+    action: goToSetTime,
   },
 };
 
@@ -94,6 +102,64 @@ const screen show_datetime_screen = {
   length: 3,
   items: show_datetime_items,
   drawOver: drawOverShowDateTime,
+};
+
+// -----------------------------------------------------------------------------
+// Set date screen
+
+extern void drawOverSetDate(void);
+
+const screenItem set_date_items[] = {
+  back_2_show_datetime,
+  {
+    text: "Year:",
+    action: NULL,
+  },
+  {
+    text: "Month:",
+    action: NULL,
+  },
+  {
+    text: "Day:",
+    action: NULL,
+  },
+  {
+    text: "DoW:",
+    action: NULL,
+  },
+};
+
+const screen set_date_screen = {
+  length: 5,
+  items: set_date_items,
+  drawOver: drawOverSetDate,
+};
+
+// -----------------------------------------------------------------------------
+// Set time screen
+
+extern void drawOverSetTime(void);
+
+const screenItem set_time_items[] = {
+  back_2_show_datetime,
+  {
+    text: "Hour:",
+    action: NULL,
+  },
+  {
+    text: "Min:",
+    action: NULL,
+  },
+  {
+    text: "Sec:",
+    action: NULL,
+  },
+};
+
+const screen set_time_screen = {
+  length: 4,
+  items: set_time_items,
+  drawOver: drawOverSetTime,
 };
 
 // -----------------------------------------------------------------------------
