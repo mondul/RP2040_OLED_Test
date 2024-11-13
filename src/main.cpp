@@ -37,6 +37,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 // Display buffer
 uint8_t *buf;
 
+// Applies a XOR mask directly to the screen buffer to mark it as selected
 void invertLine(uint8_t line) {
   line--;
   uint16_t pos;
@@ -46,8 +47,10 @@ void invertLine(uint8_t line) {
   }
 }
 
+// Is screen inverted?
 bool is_inverted = false;
 
+// Fills, patches and shows screen buffer
 void showScreen() {
   display.clearDisplay();
   display.invertDisplay(is_inverted);
@@ -63,6 +66,7 @@ void showScreen() {
   display.display();
 }
 
+// -----------------------------------------------------------------------------
 // Functions in _screens_ that use _display_
 
 void invertColors() {
@@ -108,6 +112,7 @@ void turnScreenOff() {
   display.display();
 }
 
+// -----------------------------------------------------------------------------
 // Program entry point
 void setup() {
   // put your setup code here, to run once:
@@ -127,15 +132,20 @@ void setup() {
   back2Home();
 }
 
+// -----------------------------------------------------------------------------
+
 int prev_count = 0, current_count = 0;
 
 void loop() {
   // put your main code here, to run repeatedly:
   // First check button press
   if (!digitalRead(PIN_BTN)) {
+    // Wait until button is released
+    while (!digitalRead(PIN_BTN));
     if (current_screen->items[current_screen_selection - 1].action)
       current_screen->items[current_screen_selection - 1].action();
-    delay(250); // Discard bounces
+    delay(100); // Discard bounces
+    // Redraw might not be needed so continue to the next loop cycle
     return;
   }
   // Now check selection

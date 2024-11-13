@@ -81,11 +81,11 @@ extern void drawOverShowDateTime(void);
 const screenItem show_datetime_items[] = {
   back_2_home_item,
   {
-    text: NULL,
+    text: NULL, // Current date will be overwritten here
     action: NULL,
   },
   {
-    text: NULL,
+    text: NULL, // Current time will be overwritten here
     action: NULL,
   },
 };
