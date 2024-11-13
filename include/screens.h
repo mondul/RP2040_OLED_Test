@@ -17,7 +17,9 @@ typedef struct
   void (*drawOver)(void);
 } screen;
 
-// Variables
+// -----------------------------------------------------------------------------
+// Variables and constants
+
 extern volatile uint8_t prev_screen_selection;
 extern uint8_t current_screen_selection;
 extern const screen *current_screen;
@@ -34,6 +36,41 @@ const screenItem back_2_home_item = {
 
 const screenItem back_2_home_items[] = {
   back_2_home_item,
+};
+
+// -----------------------------------------------------------------------------
+// Home screen
+
+extern void invertColors(void);
+extern void turnScreenOff(void);
+
+const screenItem home_items[] = {
+  {
+    text: "Show date & time",
+    action: goToShowDateTime,
+  },
+  {
+    text: "Show temperature",
+    action: goToShowTemp,
+  },
+  {
+    text: "Invert colors",
+    action: invertColors,
+  },
+  {
+    text: "About...",
+    action: goToAbout,
+  },
+  {
+    text: "Turn screen off",
+    action: turnScreenOff,
+  }
+};
+
+const screen home_screen = {
+  length: 5,
+  items: home_items,
+  drawOver: NULL,
 };
 
 // -----------------------------------------------------------------------------
@@ -75,41 +112,6 @@ const screen about_screen = {
   length: 1,
   items: back_2_home_items,
   drawOver: drawOverAbout,
-};
-
-// -----------------------------------------------------------------------------
-// Home screen
-
-extern void invertColors(void);
-extern void turnScreenOff(void);
-
-const screenItem home_items[] = {
-  {
-    text: "Show date & time",
-    action: goToShowDateTime,
-  },
-  {
-    text: "Show temperature",
-    action: goToShowTemp,
-  },
-  {
-    text: "Invert colors",
-    action: invertColors,
-  },
-  {
-    text: "About...",
-    action: goToAbout,
-  },
-  {
-    text: "Turn screen off",
-    action: turnScreenOff,
-  }
-};
-
-const screen home_screen = {
-  length: 5,
-  items: home_items,
-  drawOver: NULL,
 };
 
 #endif
